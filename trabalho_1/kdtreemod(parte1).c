@@ -116,7 +116,7 @@ void heap_insere(heap *h, void *key, double dist) {
         h->dados[0].dist = dist;
     }
 
-    // Max-heap parcial (bubble down)
+// Max-heap parcial
     for (int i = h->tamanho / 2 - 1; i >= 0; i--) {
         int maior = i;
         int esq = 2 * i + 1;
@@ -158,41 +158,23 @@ void kdtree_busca_n_vizinhos(tarv *arv, void *query, int n, heap *h) {
     _kdtree_busca_n(arv, arv->raiz, query, 0, h);
 }
 
-// ======================= TESTES =======================
-
-void teste() {
-    tarv arv;
-    kdtree_constroi(&arv, comparador_face, distancia_face, EMBEDDING_SIZE);
-
-    float v1[EMBEDDING_SIZE] = {0};
-    float v2[EMBEDDING_SIZE] = {1};
-    float v3[EMBEDDING_SIZE] = {2};
-    float v4[EMBEDDING_SIZE] = {3};
-    float v5[EMBEDDING_SIZE] = {4};
-
-    kdtree_insere(&arv, aloca_face(v1, "Pessoa_0"));
-    kdtree_insere(&arv, aloca_face(v2, "Pessoa_1"));
-    kdtree_insere(&arv, aloca_face(v3, "Pessoa_2"));
-    kdtree_insere(&arv, aloca_face(v4, "Pessoa_3"));
-    kdtree_insere(&arv, aloca_face(v5, "Pessoa_4"));
-
-    float consulta[EMBEDDING_SIZE] = {1.5}; // próximo de Pessoa_1 e Pessoa_2
-    void *query = aloca_face(consulta, "consulta");
-
-    heap h;
-    kdtree_busca_n_vizinhos(&arv, query, 3, &h);
-
-    printf("3 vizinhos mais próximos:\n");
-    for (int i = 0; i < h.tamanho; i++) {
-        tface *f = (tface *)h.dados[i].key;
-        printf("ID: %s, Distância: %lf\n", f->id, h.dados[i].dist);
+// Libera memória
+void libera_no(tnode *no) {
+    if (no) {
+        libera_no(no->esq);
+        libera_no(no->dir);
+        free(no->key);
+        free(no);
     }
-
-    free(query);
-    free(h.dados);
 }
 
+void kdtree_libera(tarv *arv) {
+    libera_no(arv->raiz);
+    arv->raiz = NULL;
+}
+
+
+
 int main() {
-    teste();
     return 0;
 }
