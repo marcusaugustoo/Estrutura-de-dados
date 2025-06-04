@@ -1,4 +1,3 @@
-# Dicionário com sua embedding
 embedding_dict = {'minhaface': [1.1082955598831177,
   -1.2677531242370605,
   0.9679879546165466,
@@ -126,12 +125,10 @@ embedding_dict = {'minhaface': [1.1082955598831177,
   0.4259551167488098,
   1.2151479721069336,
   0.19177672266960144,
-  0.07255391776561737]}  # completa já está com você
+  0.07255391776561737]}  
 
-# Nome do arquivo
 nome_arquivo = 'query.txt'
 
-# Salvar no formato: minhaface <128 valores separados por espaço>
 with open(nome_arquivo, 'w') as f:
     nome = list(embedding_dict.keys())[0]
     valores = embedding_dict[nome]
